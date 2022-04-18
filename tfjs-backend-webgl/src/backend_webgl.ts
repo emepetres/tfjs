@@ -147,6 +147,10 @@ export class MathBackendWebGL extends KernelBackend {
   texData: DataStorage<TextureData>;
   gpgpu: GPGPUContext;
 
+  // custom code
+  key: string;
+  binary: GPGPUBinary;
+
   private static nextDataId = 0;
   private nextDataId(): number {
     return MathBackendWebGL.nextDataId++;
@@ -190,8 +194,6 @@ export class MathBackendWebGL extends KernelBackend {
     if (!env().getBool("HAS_WEBGL")) {
       throw new Error("WebGL is not supported on this device");
     }
-
-    console.log("-----> this is our f***ing code!!!");
 
     let newGPGPU;
     if (gpuResource != null) {
@@ -1112,6 +1114,11 @@ export class MathBackendWebGL extends KernelBackend {
         outputData
       );
     });
+
+    // custom code
+    this.key = key;
+    this.binary = binary;
+
     const shouldTimeProgram = this.activeTimers != null;
     let query: WebGLQuery | CPUTimerQuery;
     if (shouldTimeProgram) {
